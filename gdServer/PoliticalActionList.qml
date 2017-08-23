@@ -22,7 +22,7 @@ QtObject{
 
     property list<PoliticalAction> allowedActions: [
         PoliticalAction{
-            title:"Предложить политическую реформу"
+            title:"Предложить политическую реформу (remote)"
             cost: 0
             onTrigger:{
                 inviteOligarhs(10,group)

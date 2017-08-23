@@ -1,9 +1,10 @@
-import QtQuick 2.7
+import QtQuick 2.9
 import QtQuick.Controls 1.4
 import QtQuick.Window 2.2
 import vev 1.0
 
 Window {
+    id: rootWindow
     visible: true
     width: 640
     height: 480
@@ -11,8 +12,8 @@ Window {
 
     property Timer timer: Timer{
         repeat: true
-        interval: 1000
-        running: true
+        interval: 1000 * mainSettings.frameDuration
+        running: true//mainSettingsLoader.status == Loader.Ready
         triggeredOnStart: false
         onTriggered: {
             location.performFinancialActions()
@@ -32,12 +33,12 @@ Window {
 
             property PeopleGroup workers: PeopleGroup{
                 id: workersGroup
-                people: 423720
+                people: mainSettings.startPopulation
             }
 
             property PeopleGroup oligarhs: PeopleGroup{
                 id: oligarhGroup
-                people: 50
+                people: mainSettings.oligarhResidents
             }
         }
 
@@ -51,11 +52,11 @@ Window {
             enemyGroup: group0
         }
         function performFinancialActions(){
-            budget += workersGroup.people * 0.08
+            budget += workersGroup.people * mainSettings.taxes
             var groups = [ group0, group1 ]
             for(var i=0; i < groups.length; ++i){
                 var group = groups[i]
-                var money = Math.min( group.oligarhs * 1000, budget )
+                var money = Math.min( group.oligarhs * mainSettings.bribe, budget )
                 budget -= money
                 group.budget += money
             }
@@ -141,6 +142,33 @@ Window {
         oligarhGroup.people -= oligarhs
     }
 
-    property PoliticalActionList actionList: PoliticalActionList {}
+    property var actionList: PoliticalActionList {}
+    property var mainSettings: MainSettings { }
+
+
+
+
+
+    property Loader mainSettingsLoader: Loader{
+        source: "http://localhost:8080/MainSettings.qml"
+    }
+
+    property Loader actionListLoader: Loader{
+        source: "http://localhost:8080/PoliticalActionList.qml"
+    }
+
+    Binding{
+        target: rootWindow
+        property: 'mainSettings'
+        value: mainSettingsLoader.item
+        when: mainSettingsLoader.status === Loader.Ready
+    }
+
+    Binding{
+        target: rootWindow
+        property: 'actionList'
+        value: actionListLoader.item
+        when: actionListLoader.status === Loader.Ready
+    }
 
 }

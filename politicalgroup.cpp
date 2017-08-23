@@ -30,11 +30,11 @@ PoliticalGroup* PoliticalGroup::enemyGroup() const{
 }
 
 double PoliticalGroup::enemyTargetChance() const{
-    return 0.9;
+    return _enemyTargetChance;
 }
 
 double PoliticalGroup::performFanaticActionChance() const{
-    return 0.1;
+    return _performFanaticActionChance;
 }
 
 PeopleGroup *PoliticalGroup::fanatics() const{
@@ -115,5 +115,19 @@ void PoliticalGroup::resetPeopleGroups(QQmlListProperty<PeopleGroup> *property){
     auto obj = qobject_cast<PoliticalGroup*>(property->object);
     if(obj){
         obj->_peopleGroups.clear();
+    }
+}
+
+void PoliticalGroup::setEnemyTargetChance(double arg){
+    if(_enemyTargetChance != arg){
+        _enemyTargetChance = arg;
+        emit enemyTargetChanceChanged();
+    }
+}
+
+void PoliticalGroup::setPerformFanaticActionChance(double arg){
+    if(_performFanaticActionChance != arg){
+        _performFanaticActionChance = arg;
+        emit performFanaticActionChanceChanged();
     }
 }

@@ -12,6 +12,9 @@ class PoliticalGroup : public QObject{
     Q_PROPERTY(QQmlListProperty<PeopleGroup> peopleGroups READ peopleGroups NOTIFY peopleGroupsChanged)
     Q_PROPERTY(PoliticalGroup* enemyGroup READ enemyGroup WRITE setEnemyGroup NOTIFY enemyGroupChanged)
     Q_PROPERTY(PeopleGroup* fanatics READ fanatics WRITE setFanatics NOTIFY fanaticsChanged)
+
+    Q_PROPERTY(double enemyTargetChance READ enemyTargetChance WRITE setEnemyTargetChance NOTIFY enemyTargetChanceChanged)
+    Q_PROPERTY(double performFanaticActionChance READ performFanaticActionChance WRITE setPerformFanaticActionChance NOTIFY performFanaticActionChanceChanged)
 public:
     explicit PoliticalGroup(QObject *parent = 0);
 
@@ -35,6 +38,9 @@ signals:
     void enemyGroupChanged();
     void fanaticsChanged();
 
+    void enemyTargetChanceChanged();
+    void performFanaticActionChanceChanged();
+
 public slots:
 
 private:
@@ -46,8 +52,14 @@ private:
     static int countPeopleGroups(QQmlListProperty<PeopleGroup>* property);
     static void resetPeopleGroups(QQmlListProperty<PeopleGroup>* property);
 
+    void setEnemyTargetChance(double arg);
+    void setPerformFanaticActionChance(double arg);
+
     PoliticalGroup* _enemyGroup = nullptr;
     PeopleGroup* _fanatics = nullptr;
+
+    double _enemyTargetChance = 0.9;
+    double _performFanaticActionChance = 0.1;
 
 };
 

@@ -1,0 +1,3 @@
+[submodule "fkframework"]
+	path = fkframework
+	url = https://github.com/fajrakatviro/FKDefaultPaths.git

@@ -5,6 +5,9 @@ import vev 1.0
 PoliticalGroup{
     peopleGroups: [ fanaticGroup, oligarhGroup ]
 
+    enemyTargetChance: mainSettings.enemyTargetChance
+    performFanaticActionChance: mainSettings.performFanaticActionChance
+
     property int agitationPower: 0
     property int budget: 0
 
