@@ -11,10 +11,11 @@ int main(int argc, char *argv[])
 
     QQmlApplicationEngine engine;
 
-    qmlRegisterType<SomeCountry>("vev",1,0,"SomeCountry");
-    qmlRegisterType<PoliticalGroup>("vev",1,0,"PoliticalGroup");
-    qmlRegisterType<PeopleGroup>("vev",1,0,"PeopleGroup");
+    qmlRegisterType<SomeCountry>("modules.vev",1,0,"SomeCountry");
+    qmlRegisterType<PoliticalGroup>("modules.vev",1,0,"PoliticalGroup");
+    qmlRegisterType<PeopleGroup>("modules.vev",1,0,"PeopleGroup");
 
+    engine.addImportPath("qrc:/");
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

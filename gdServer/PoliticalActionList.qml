@@ -1,5 +1,5 @@
 import QtQml 2.2
-import vev 1.0
+import modules.vev 1.0
 
 QtObject{
 
@@ -22,7 +22,7 @@ QtObject{
 
     property list<PoliticalAction> allowedActions: [
         PoliticalAction{
-            title:"Предложить политическую реформу (remote)"
+            title:"Предложить политическую реформу"
             cost: 0
             onTrigger:{
                 inviteOligarhs(10,group)

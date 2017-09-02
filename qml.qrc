@@ -1,12 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>main.qml</file>
-        <file>PoliticalPower.qml</file>
-        <file>PoliticalActionList.qml</file>
-        <file>MainSettings.qml</file>
     </qresource>
-    <qresource prefix="/qt-project.org/imports/vev">
+    <qresource prefix="/modules/vev">
         <file>PoliticalAction.qml</file>
         <file>qmldir</file>
+        <file>PoliticalPower.qml</file>
     </qresource>
 </RCC>

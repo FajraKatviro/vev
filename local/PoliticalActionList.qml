@@ -1,5 +1,5 @@
 import QtQml 2.2
-import vev 1.0
+import modules.vev 1.0
 
 QtObject{
 

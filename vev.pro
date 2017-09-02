@@ -36,3 +36,5 @@ HEADERS += \
     somecountry.h \
     politicalgroup.h \
     peoplegroup.h
+
+OTHER_FILES += gdServer/* local/*

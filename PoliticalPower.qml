@@ -1,6 +1,6 @@
 import QtQuick 2.7
 import QtQuick.Window 2.2
-import vev 1.0
+import modules.vev 1.0
 
 PoliticalGroup{
     peopleGroups: [ fanaticGroup, oligarhGroup ]
@@ -21,4 +21,5 @@ PoliticalGroup{
     property PeopleGroup oligarhsProperty: PeopleGroup{
         id: oligarhGroup
     }
+
 }
