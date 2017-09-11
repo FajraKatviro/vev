@@ -42,6 +42,11 @@ Rectangle{
             }
             height: parent.height * 0.5
             width: mainMenuLabel.width * 0.5 - 6
+            onClicked: {
+                player0.controlledByUser = true
+                mainMenu.visible = false
+                hintPopup.visible = true
+            }
         }
         Button{
             text: "Политические силы"
@@ -60,71 +65,126 @@ Rectangle{
             }
             height: parent.height * 0.5
             width: mainMenuLabel.width * 0.5 - 6
+            onClicked: {
+                player1.controlledByUser = true
+                mainMenu.visible = false
+                hintPopup.visible = true
+            }
         }
     }
 
-    Row{
+    Item{
+        id: hintPopup
+        anchors.fill: parent
         visible: false
-        Column{
-            width: 200
-            Text{
-                text: group0.fans
+        Text{
+            id: hintText
+            width: 300
+            anchors.centerIn: parent
+            text: "Проводите политические акции для укрепления позиции в обществе.\n\n" +
+                  "Привлекайте влиятельных лиц для увеличения финансирования, распределяемого на политические нужды.\n\n" +
+                   "Чем выше ваша политическая сила, тем больше последователей захочет к вам присоединиться.\n\n" +
+                   "Ваши последователи будут стоять за ваше дело до конца и попытаются сокрушить оппозиционные силы любыми доступными способами. " +
+                   "К сожалению, как и в любом большом деле, в серьезной политической борьбе неизбежно будут происходить и случайные потери. " +
+                   "Тем не менее, это не должно отвлекать вас от главной цели."
+
+            verticalAlignment: Text.AlignVCenter
+            //horizontalAlignment: Text.AlignHCenter
+            wrapMode: Text.Wrap
+        }
+        Button{
+            anchors{
+                horizontalCenter: hintText.horizontalCenter
+                top: hintText.bottom
+                topMargin: 50
             }
-            Text{
-                text: group0.oligarhs
+            text: "Вперёд!"
+            onClicked:{
+                hintPopup.visible = false
+                startGame()
             }
+        }
+    }
+
+    Item{
+        id: gameScreen
+        anchors.fill: parent
+        visible: false
+
+        Configured.PlayerView{
+            id: player0
+            anchors.left: parent.left
+            controlledGroup: group0
+        }
+
+        Configured.PlayerView{
+            id: player1
+            anchors.right: parent.right
+            controlledGroup: group1
+        }
+
+        Configured.CountryView{
+            id: countryView
+            height: parent.height * 0.1
+            anchors{
+                left: parent.left
+                right: parent.right
+                bottom: parent.bottom
+            }
+            sourceGroup: neutralGroup
+        }
+
+        Rectangle{
+            anchors{
+                top: parent.top
+                left: player0.right
+                right: player1.left
+                bottom: countryView.top
+            }
+            color: "yellow"
             Text{
-                text: group0.budget
+                anchors.centerIn: parent
+                text: "Карта Какого-то государства"
             }
         }
 
-        Column{
-            width: 200
-            Text{
-                text: workersGroup.people
+    }
+
+    Item{
+        id: loosePopup
+        anchors.fill: parent
+        visible: false
+        Rectangle{
+            id: loosePopupBg
+            anchors.fill: parent
+            color: loosePopup.visible ? "black" : "transparent"
+            Text {
+                anchors.centerIn: parent
+                width: parent.width * 0.7
+                color: "white"
+                text: "Политическая сила победила: все граждане умерли.\nВозможно, в следующий раз вы предпочтёте жизни людей, а не политику?"
+                wrapMode: Text.WrapAtWordBoundaryOrAnywhere
+                horizontalAlignment: Text.AlignHCenter
             }
-            Text{
-                text: oligarhGroup.people
-            }
-            Text{
-                text: location.budget
+            Behavior on color {
+                ColorAnimation{ duration: 1000 }
             }
         }
+    }
 
+    function startGame(){
+        gameScreen.visible = true
+        isGameRunning = true
+    }
 
-        Column{
-            width: 200
-            Text{
-                text: group1.fans
-            }
-            Text{
-                text: group1.oligarhs
-            }
-            Text{
-                text: group1.budget
-            }
-        }
-
-        Column{
-            width: 200
-            Repeater{
-                id:actions
-                model: actionList.allowedActions
-                Button{
-                    text: modelData.title
-                    property var source: modelData
-                    enabled: source.cost <= group1.budget
-                    onClicked:{
-                        actionList.performAction(index,group1)
-                    }
-                }
-            }
-        }
-
+    function endGame(){
+        gameScreen.visible = false
+        loosePopup.visible = true
+        isGameRunning = false
     }
 
     property bool isGameRunning: false
-    property Timer timer: Timer{
+    property Timer mainTimer: Timer{
         repeat: true
         interval: 1000 * mainSettings.frameDuration
         running: isGameRunning
@@ -138,6 +198,8 @@ Rectangle{
 
     property SomeCountry location: SomeCountry{
         groups: [ neutralGroup, group0, group1 ]
+
+        onExtinction: endGame()
 
         property int budget: 0
 
@@ -159,12 +221,15 @@ Rectangle{
         property PoliticalGroup power0: PoliticalPower{
             id: group0
             enemyGroup: group1
+            property var actionList: Configured.PoliticalActionList {}
         }
 
         property PoliticalGroup power1: PoliticalPower{
             id: group1
             enemyGroup: group0
+            property var actionList: Configured.PoliticalActionList {}
         }
+
         function performFinancialActions(){
             budget += workersGroup.people * mainSettings.taxes
             var groups = [ group0, group1 ]
@@ -195,6 +260,5 @@ Rectangle{
     }
 
     property var mainSettings: Configured.MainSettings {}
-    property var actionList: Configured.PoliticalActionList {}
 
 }

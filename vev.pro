@@ -37,4 +37,4 @@ HEADERS += \
     politicalgroup.h \
     peoplegroup.h
 
-OTHER_FILES += gdServer/* local/*
+OTHER_FILES += gdServer/*

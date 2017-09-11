@@ -22,6 +22,9 @@ void SomeCountry::performFanaticActions(){
             performFanaticAction(g);
         }
     }
+    if (population() <= 0) {
+        emit extinction();
+    }
 }
 
 void SomeCountry::performFanaticAction(PoliticalGroup* source){
@@ -47,8 +50,6 @@ void SomeCountry::performFanaticAction(PoliticalGroup* source){
             }
         }
     }
-
-    emit extinction();
 }
 
 QQmlListProperty<PoliticalGroup> SomeCountry::groups(){
