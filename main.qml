@@ -11,13 +11,16 @@ Window {
     height: 750
     title: "VEV"
 
+    property bool useRemoteSettings: false
+
     Loader {
         id: remoteRoot
         anchors.fill: parent
         property string loadingIp: "46.149.44.200"
         property string loadingPort: "8787"
+        property string host: useRemoteSettings ? "http://" + loadingIp + ":" + loadingPort : "qrc:/gdServer"
         active: false
-        source: "http://" + loadingIp + ":" + loadingPort + "/VevGame.qml"
+        source: host + "/VevGame.qml"
     }
 
     Dialog{
@@ -34,6 +37,10 @@ Window {
         }
     }
 
-    Component.onCompleted: ipSelector.open()
-
+    Component.onCompleted:{
+        if(useRemoteSettings)
+            ipSelector.open()
+        else
+            remoteRoot.active = true
+    }
 }

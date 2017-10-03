@@ -1,3 +1,4 @@
 module modules.vev
 PoliticalAction 1.0 PoliticalAction.qml
 PoliticalPower 1.0 PoliticalPower.qml
+ReloadableInstance 1.0 ReloadableInstance.qml

@@ -114,13 +114,13 @@ Rectangle{
         Configured.PlayerView{
             id: player0
             anchors.left: parent.left
-            controlledGroup: group0
+            controlledGroup: location.power0
         }
 
         Configured.PlayerView{
             id: player1
             anchors.right: parent.right
-            controlledGroup: group1
+            controlledGroup: location.power1
         }
 
         Configured.CountryView{
@@ -131,7 +131,7 @@ Rectangle{
                 right: parent.right
                 bottom: parent.bottom
             }
-            sourceGroup: neutralGroup
+            sourceGroup: location.neutrals
         }
 
         Rectangle{
@@ -170,6 +170,20 @@ Rectangle{
                 ColorAnimation{ duration: 1000 }
             }
         }
+        MouseArea{
+            anchors.fill: parent
+            onClicked: newGame()
+        }
+    }
+
+    function newGame(){
+        mainMenu.visible = true
+        hintPopup.visible = false
+        gameScreen.visible = false
+        loosePopup.visible = false
+        player0.controlledByUser = false
+        player1.controlledByUser = false
+        locationSource.reload()
     }
 
     function startGame(){
@@ -196,67 +210,72 @@ Rectangle{
         }
     }
 
-    property SomeCountry location: SomeCountry{
-        groups: [ neutralGroup, group0, group1 ]
+    property ReloadableInstance locationSource: ReloadableInstance{
+        Component{
+            SomeCountry{
+                groups: [ neutralGroup, group0, group1 ]
 
-        onExtinction: endGame()
+                onExtinction: endGame()
 
-        property int budget: 0
+                property int budget: 0
 
-        property PoliticalGroup neutrals: PoliticalGroup{
-            id: neutralGroup
-            peopleGroups: [ workersGroup, oligarhGroup ]
+                property PoliticalGroup neutrals: PoliticalGroup{
+                    id: neutralGroup
+                    peopleGroups: [ workersGroup, oligarhGroup ]
 
-            property PeopleGroup workers: PeopleGroup{
-                id: workersGroup
-                people: mainSettings.startPopulation
+                    property PeopleGroup workers: PeopleGroup{
+                        id: workersGroup
+                        people: mainSettings.startPopulation
+                    }
+
+                    property PeopleGroup oligarhs: PeopleGroup{
+                        id: oligarhGroup
+                        people: mainSettings.oligarhResidents
+                    }
+                }
+
+                property PoliticalGroup power0: PoliticalPower{
+                    id: group0
+                    enemyGroup: group1
+                    property var actionList: Configured.PoliticalActionList {}
+                }
+
+                property PoliticalGroup power1: PoliticalPower{
+                    id: group1
+                    enemyGroup: group0
+                    property var actionList: Configured.PoliticalActionList {}
+                }
+
+                function performFinancialActions(){
+                    budget += workersGroup.people * mainSettings.taxes
+                    var groups = [ group0, group1 ]
+                    for(var i=0; i < groups.length; ++i){
+                        var group = groups[i]
+                        var money = Math.min( group.oligarhs * mainSettings.bribe, budget )
+                        budget -= money
+                        group.budget += money
+                    }
+                }
+
+                function performAgitationActions(){
+                    var groups = [ group0, group1 ]
+                    for(var i=0; i < groups.length; ++i){
+                        var group = groups[i]
+                        var recruts = Math.min( group.agitationPower, workersGroup.people )
+                        workersGroup.people -= recruts
+                        group.fans += recruts
+                    }
+                }
             }
-
-            property PeopleGroup oligarhs: PeopleGroup{
-                id: oligarhGroup
-                people: mainSettings.oligarhResidents
-            }
         }
-
-        property PoliticalGroup power0: PoliticalPower{
-            id: group0
-            enemyGroup: group1
-            property var actionList: Configured.PoliticalActionList {}
-        }
-
-        property PoliticalGroup power1: PoliticalPower{
-            id: group1
-            enemyGroup: group0
-            property var actionList: Configured.PoliticalActionList {}
-        }
-
-        function performFinancialActions(){
-            budget += workersGroup.people * mainSettings.taxes
-            var groups = [ group0, group1 ]
-            for(var i=0; i < groups.length; ++i){
-                var group = groups[i]
-                var money = Math.min( group.oligarhs * mainSettings.bribe, budget )
-                budget -= money
-                group.budget += money
-            }
-        }
-
-        function performAgitationActions(){
-            var groups = [ group0, group1 ]
-            for(var i=0; i < groups.length; ++i){
-                var group = groups[i]
-                var recruts = Math.min( group.agitationPower, workersGroup.people )
-                workersGroup.people -= recruts
-                group.fans += recruts
-            }
-        }
-
     }
 
+    property SomeCountry location: locationSource.instance
+
     function inviteOligarhs(count,group){
-        var oligarhs = Math.min( count, oligarhGroup.people )
+        var oligarhs = Math.min( count, location.neutrals.oligarhs.people )
         group.oligarhs += oligarhs
-        oligarhGroup.people -= oligarhs
+        location.neutrals.oligarhs.people -= oligarhs
     }
 
     property var mainSettings: Configured.MainSettings {}

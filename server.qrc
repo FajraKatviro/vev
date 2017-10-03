@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>gdServer/CountryView.qml</file>
+        <file>gdServer/MainSettings.qml</file>
+        <file>gdServer/PlayerView.qml</file>
+        <file>gdServer/PoliticalActionList.qml</file>
+        <file>gdServer/VevGame.qml</file>
+    </qresource>
+</RCC>

@@ -6,5 +6,6 @@
         <file>PoliticalAction.qml</file>
         <file>qmldir</file>
         <file>PoliticalPower.qml</file>
+        <file>ReloadableInstance.qml</file>
     </qresource>
 </RCC>
