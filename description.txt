@@ -1,0 +1,2 @@
+Simple policy simulator.
+Make love, not policy!

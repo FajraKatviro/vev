@@ -38,7 +38,8 @@ HEADERS += \
     politicalgroup.h \
     peoplegroup.h
 
-OTHER_FILES += gdServer/*
+OTHER_FILES += description.txt \
+                gdServer/*
 
 RAW_CONTENT = gdServer/CountryView.qml \
               gdServer/MainSettings.qml \
@@ -46,8 +47,15 @@ RAW_CONTENT = gdServer/CountryView.qml \
               gdServer/PoliticalActionList.qml \
               gdServer/VevGame.qml
 
+DEPLOY_BUILD_FOLDER = $$PWD/../deployBuild
+SHORT_DESCRIPTION = "Game about policy"
+LONG_DESCRIPTION = $$PWD/description.txt
+QMAKE_TARGET_PRODUCT = VEV
+QMAKE_TARGET_COMPANY = 'Fajra Katviro'
+VERSION = 1.0.0
 
-FK += content
+FK += content helpers mobile
+FK += deploy
 
 DESTDIR = $$PWD/../bin
 
