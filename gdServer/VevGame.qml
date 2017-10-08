@@ -44,6 +44,7 @@ Rectangle{
             width: mainMenuLabel.width * 0.5 - 6
             onClicked: {
                 player0.controlledByUser = true
+                autoPlayer.target = location.power1
                 mainMenu.visible = false
                 hintPopup.visible = true
             }
@@ -67,6 +68,7 @@ Rectangle{
             width: mainMenuLabel.width * 0.5 - 6
             onClicked: {
                 player1.controlledByUser = true
+                autoPlayer.target = location.power0
                 mainMenu.visible = false
                 hintPopup.visible = true
             }
@@ -183,6 +185,8 @@ Rectangle{
         loosePopup.visible = false
         player0.controlledByUser = false
         player1.controlledByUser = false
+        autoPlayer.target = null
+        autoPlayer.frameCounter = 0
         locationSource.reload()
     }
 
@@ -207,6 +211,8 @@ Rectangle{
             location.performFinancialActions()
             location.performAgitationActions()
             location.performFanaticActions()
+
+            autoPlayer.perfromPlayerActions()
         }
     }
 
@@ -271,6 +277,8 @@ Rectangle{
     }
 
     property SomeCountry location: locationSource.instance
+
+    property AutoPlayer autoPlayer: AutoPlayer{ }
 
     function inviteOligarhs(count,group){
         var oligarhs = Math.min( count, location.neutrals.oligarhs.people )

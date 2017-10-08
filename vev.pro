@@ -9,10 +9,10 @@ SOURCES += main.cpp \
     peoplegroup.cpp
 
 RESOURCES += qml.qrc
-RESOURCES += server.qrc
+#RESOURCES += server.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
-QML_IMPORT_PATH =
+QML_IMPORT_PATH = $PWD $PWD/gdServer
 
 # Additional import path used to resolve QML modules just for Qt Quick Designer
 QML_DESIGNER_IMPORT_PATH =
@@ -39,3 +39,16 @@ HEADERS += \
     peoplegroup.h
 
 OTHER_FILES += gdServer/*
+
+RAW_CONTENT = gdServer/CountryView.qml \
+              gdServer/MainSettings.qml \
+              gdServer/PlayerView.qml \
+              gdServer/PoliticalActionList.qml \
+              gdServer/VevGame.qml
+
+
+FK += content
+
+DESTDIR = $$PWD/../bin
+
+include(fkframework/fkframework.pri)

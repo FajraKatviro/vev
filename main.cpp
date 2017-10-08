@@ -1,5 +1,6 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
+#include <QQmlContext>
 
 #include "peoplegroup.h"
 #include "politicalgroup.h"
@@ -16,6 +17,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<PeopleGroup>("modules.vev",1,0,"PeopleGroup");
 
     engine.addImportPath("qrc:/");
+    engine.rootContext()->setContextProperty("applicationDir",app.applicationDirPath());
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

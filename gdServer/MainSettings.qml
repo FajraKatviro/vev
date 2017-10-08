@@ -8,4 +8,5 @@ QtObject{
     property int bribe:                         1000    //founds income per oligarh per frame
     property double performFanaticActionChance: 0.1     //chance to perfrom murder actions per fanatic per frame
     property double enemyTargetChance:          0.9     //chance select target from opposition (not neutral or self)
+    property int autoplayerLatency:             10      //autoplayer skip frames before action
 }

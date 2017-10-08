@@ -18,7 +18,7 @@ Window {
         anchors.fill: parent
         property string loadingIp: "46.149.44.200"
         property string loadingPort: "8787"
-        property string host: useRemoteSettings ? "http://" + loadingIp + ":" + loadingPort : "qrc:/gdServer"
+        property string host: useRemoteSettings ? "http://" + loadingIp + ":" + loadingPort : "file://" + applicationDir + "/constAppData/rawContent"
         active: false
         source: host + "/VevGame.qml"
     }

@@ -7,5 +7,6 @@
         <file>qmldir</file>
         <file>PoliticalPower.qml</file>
         <file>ReloadableInstance.qml</file>
+        <file>AutoPlayer.qml</file>
     </qresource>
 </RCC>
