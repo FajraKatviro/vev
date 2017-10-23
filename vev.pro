@@ -41,22 +41,38 @@ HEADERS += \
 OTHER_FILES += description.txt \
                 gdServer/*
 
+!ios:!android{
 RAW_CONTENT = gdServer/CountryView.qml \
               gdServer/MainSettings.qml \
               gdServer/PlayerView.qml \
               gdServer/PoliticalActionList.qml \
               gdServer/VevGame.qml
+}
 
-DEPLOY_BUILD_FOLDER = $$PWD/../deployBuild
+ART_FOLDER = $$PWD/art/imagesets
+ART_BUILD_FOLDER = $$PWD/resourceBuild/vev/imagesets
+DEPLOY_BUILD_FOLDER = $$PWD/deployBuild
+DESTDIR = $$PWD/deployedApp
+
+
 SHORT_DESCRIPTION = "Game about policy"
 LONG_DESCRIPTION = $$PWD/description.txt
 QMAKE_TARGET_PRODUCT = VEV
 QMAKE_TARGET_COMPANY = 'Fajra Katviro'
 VERSION = 1.0.0
 
-FK += content helpers mobile
-FK += deploy
+FK +=  helpers mobile #content imageset
+#FK += deploy
 
-DESTDIR = $$PWD/../bin
+
+ios:FK_MOBILE_ICONS = $$PWD/art/iosIcons
+android:FK_MOBILE_ICONS = $$PWD/art/androidIcons
+mac{
+    ICON = $$PWD/art/desktopIcons/icon.icns
+}else{
+    ICON = $$PWD/art/desktopIcons/icon_128x128.png
+}
+RC_ICONS = $$PWD/art/desktopIcons/icon.ico
+
 
 include(fkframework/fkframework.pri)

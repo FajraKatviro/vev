@@ -11,7 +11,7 @@ Window {
     height: 750
     title: "VEV"
 
-    property bool useRemoteSettings: false
+    property bool useRemoteSettings: true
 
     Loader {
         id: remoteRoot

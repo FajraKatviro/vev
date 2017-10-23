@@ -19,7 +19,7 @@ int main(int argc, char *argv[])
     qmlRegisterType<PeopleGroup>("modules.vev",1,0,"PeopleGroup");
 
     engine.addImportPath("qrc:/");
-#if (QT_VERSION == QT_VERSION_CHECK(5, 9, 2))
+#if (QT_VERSION == QT_VERSION_CHECK(5, 9, 2)) && defined(Q_OS_MACOS)
     engine.rootContext()->setContextProperty("resourceDir",app.applicationDirPath() + "/../Resources/constAppData");
 #else
     engine.rootContext()->setContextProperty("resourceDir",FKUtility::dataDir().absolutePath());
