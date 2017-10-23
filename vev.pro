@@ -64,7 +64,7 @@ VERSION = 1.0.0
 FK +=  helpers mobile #content imageset
 #FK += deploy
 
-
+FK_IOS_PLIST = $$PWD/Info.plist
 ios:FK_MOBILE_ICONS = $$PWD/art/iosIcons
 android:FK_MOBILE_ICONS = $$PWD/art/androidIcons
 mac{
