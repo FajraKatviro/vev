@@ -24,6 +24,14 @@ int main(int argc, char *argv[])
 #else
     engine.rootContext()->setContextProperty("resourceDir",FKUtility::dataDir().absolutePath());
 #endif
+
+#ifdef VEV_REMOTE
+    bool isRemote = true;
+#else
+    bool isRemote = false;
+#endif
+    engine.rootContext()->setContextProperty("isRemote",isRemote);
+
     engine.load(QUrl(QStringLiteral("qrc:/main.qml")));
 
     return app.exec();

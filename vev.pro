@@ -9,7 +9,6 @@ SOURCES += main.cpp \
     peoplegroup.cpp
 
 RESOURCES += qml.qrc
-#RESOURCES += server.qrc
 
 # Additional import path used to resolve QML modules in Qt Creator's code model
 QML_IMPORT_PATH = $PWD $PWD/gdServer
@@ -41,18 +40,39 @@ HEADERS += \
 OTHER_FILES += description.txt \
                 gdServer/*
 
-!ios:!android{
-RAW_CONTENT = gdServer/CountryView.qml \
-              gdServer/MainSettings.qml \
-              gdServer/PlayerView.qml \
-              gdServer/PoliticalActionList.qml \
-              gdServer/VevGame.qml
+VEV_DEV = true
+
+!isEmpty(VEV_DEV):{
+    !ios:!android{
+        VEV_MODE = local
+    } else {
+        VEV_MODE = remote
+    }
+}else{
+    VEV_MODE = embedded
 }
 
-ART_FOLDER = $$PWD/art/imagesets
-ART_BUILD_FOLDER = $$PWD/resourceBuild/vev/imagesets
-DEPLOY_BUILD_FOLDER = $$PWD/deployBuild
-DESTDIR = $$PWD/deployedApp
+isEqual(VEV_MODE,embedded){
+    RESOURCES += server.qrc
+}
+
+isEqual(VEV_MODE,local){
+    RAW_CONTENT = gdServer/CountryView.qml \
+                  gdServer/MainSettings.qml \
+                  gdServer/PlayerView.qml \
+                  gdServer/PoliticalActionList.qml \
+                  gdServer/VevGame.qml
+    FK += content
+}
+
+isEqual(VEV_MODE,remote){
+    DEFINES += VEV_REMOTE
+}
+
+ART_FOLDER = $$PWD/../vevBuild/art/imagesets
+ART_BUILD_FOLDER = $$PWD/../vevBuild/resourceBuild/vev/imagesets
+DEPLOY_BUILD_FOLDER = $$PWD/../vevBuild/deployBuild
+DESTDIR = $$PWD/../vevBuild/deployedApp
 
 
 SHORT_DESCRIPTION = "Game about policy"
@@ -61,8 +81,18 @@ QMAKE_TARGET_PRODUCT = VEV
 QMAKE_TARGET_COMPANY = 'Fajra Katviro'
 VERSION = 1.0.0
 
-FK +=  helpers mobile #content imageset
-#FK += deploy
+FK +=  helpers
+
+ios{
+    FK += mobile
+}
+android{
+    FK += mobile
+}
+
+!ios:!android:{
+    #FK += deploy
+}
 
 FK_IOS_PLIST = $$PWD/Info.plist
 ios:FK_MOBILE_ICONS = $$PWD/art/iosIcons
